@@ -27,8 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final UserService userService;
+
     private final PasswordEncoder passwordEncoder;
+
     private final AuthenticationManager authenticationManager;
+
     private final TokenProvider tokenProvider;
 
     @PostMapping("/authenticate")
