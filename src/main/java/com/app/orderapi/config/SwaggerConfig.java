@@ -17,9 +17,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .components(
-                        new Components().addSecuritySchemes(BEARER_KEY_SECURITY_SCHEME,
-                                new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
+          .components(new Components().addSecuritySchemes(BEARER_KEY_SECURITY_SCHEME,
+            new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")))
                 .info(new Info().title(applicationName));
     }
 

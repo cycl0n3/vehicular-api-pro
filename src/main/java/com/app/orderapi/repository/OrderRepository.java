@@ -1,6 +1,7 @@
 package com.app.orderapi.repository;
 
 import com.app.orderapi.model.Order;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +11,8 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, String> {
 
     List<Order> findAllByOrderByCreatedAtDesc();
+
+    List<Order> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
 
     List<Order> findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(String id, String description);
 }
