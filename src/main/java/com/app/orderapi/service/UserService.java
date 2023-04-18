@@ -11,6 +11,8 @@ public interface UserService {
 
     Optional<User> getUserByUsername(String username);
 
+    Optional<User> getUserByEmail(String email);
+
     boolean hasUserWithUsername(String username);
 
     boolean hasUserWithEmail(String email);

@@ -21,7 +21,7 @@ app:
     expiration:
       minutes: 60
   cors:
-    allowed-origins: http://localhost:3000
+    allowed-origins: http://localhost:5173
 
 logging:
   level:
