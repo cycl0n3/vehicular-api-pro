@@ -1,5 +1,6 @@
 package com.app.orderapi.rest;
 
+import com.app.orderapi.exception.UserNotFoundException;
 import com.app.orderapi.model.User;
 import com.app.orderapi.rest.dto.AuthResponse;
 import com.app.orderapi.rest.dto.LoginRequest;
@@ -46,6 +47,7 @@ public class AuthController {
         if (userService.hasUserWithUsername(signUpRequest.getUsername())) {
             throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.getUsername()));
         }
+
         if (userService.hasUserWithEmail(signUpRequest.getEmail())) {
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.getEmail()));
         }
@@ -57,6 +59,12 @@ public class AuthController {
     }
 
     private String authenticateAndGetToken(String username, String password) {
+        // validate username, password to be not null and password length between 4 and 16
+
+        if(username == null || password == null || password.length() < 4 || password.length() > 16) {
+            throw new UserNotFoundException("Invalid username or password");
+        }
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return tokenProvider.generate(authentication);
     }
