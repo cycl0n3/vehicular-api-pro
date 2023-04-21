@@ -3,23 +3,17 @@ package com.app.orderapi.rest;
 import com.app.orderapi.config.SwaggerConfig;
 import com.app.orderapi.mapper.UserMapper;
 import com.app.orderapi.model.User;
+import com.app.orderapi.rest.dto.UserDto;
 import com.app.orderapi.security.CustomUserDetails;
 import com.app.orderapi.service.UserService;
-import com.app.orderapi.rest.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,28 +57,14 @@ public class UserController {
     // https://www.baeldung.com/spring-file-upload
     // https://www.baeldung.com/spring-mvc-image-media-data
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
-    @PostMapping("/profilePicture")
-    public ResponseEntity<Void> uploadProfilePicture(@AuthenticationPrincipal CustomUserDetails currentUser,
-                                                     HttpServletRequest request) {
+    @PostMapping("/profile-picture")
+    public ResponseEntity<Void> uploadProfilePicture(
+            @RequestPart("profile-picture") MultipartFile file,
+            @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
-            if (!ServletFileUpload.isMultipartContent(request)) {
-                return ResponseEntity.badRequest().build();
-            }
-
-            FileItemIterator itemIterator = new ServletFileUpload().getItemIterator(request);
-            FileItemStream item = itemIterator.next();
-
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-            try (InputStream in = item.openStream()) {
-                IOUtils.copy(in, baos);
-            }
-
             User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-            user.setProfilePicture(baos.toByteArray());
+            user.setProfilePicture(file.getBytes());
             userService.saveUser(user);
-
-            IOUtils.closeQuietly(baos);
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {

@@ -16,7 +16,14 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
         List<UserDto.OrderDto> orders = user.getOrders().stream().map(this::toUserDtoOrderDto).toList();
-        return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders);
+        byte[] profilePicture = user.getProfilePicture();
+
+        if (profilePicture != null) {
+            String base64ProfilePicture = java.util.Base64.getEncoder().encodeToString(profilePicture);
+            return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders, base64ProfilePicture);
+        }
+
+        return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders, null);
     }
 
     private UserDto.OrderDto toUserDtoOrderDto(Order order) {

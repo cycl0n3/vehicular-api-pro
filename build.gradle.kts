@@ -21,9 +21,8 @@ dependencies {
 	implementation("org.apache.groovy:groovy")
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
-	implementation("javax.servlet:javax.servlet-api:4.0.1")
-	implementation("commons-io:commons-io:2.11.0")
-	implementation("commons-fileupload:commons-fileupload:1.5")
+//	implementation("commons-io:commons-io:2.11.0")
+//	implementation("commons-fileupload:commons-fileupload:1.5")
 
 	providedRuntime("org.mariadb.jdbc:mariadb-java-client")
 	providedRuntime("io.jsonwebtoken:jjwt-impl:0.11.5")
