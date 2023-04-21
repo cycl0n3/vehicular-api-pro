@@ -9,13 +9,17 @@ import com.app.orderapi.rest.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.io.IOUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,5 +57,39 @@ public class UserController {
         User user = userService.validateAndGetUserByUsername(username);
         userService.deleteUser(user);
         return userMapper.toUserDto(user);
+    }
+
+    // file upload for the user's profile picture
+    // https://www.baeldung.com/spring-file-upload
+    // https://www.baeldung.com/spring-mvc-image-media-data
+    @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
+    @PostMapping("/profilePicture")
+    public ResponseEntity<Void> uploadProfilePicture(@AuthenticationPrincipal CustomUserDetails currentUser,
+                                                     HttpServletRequest request) {
+        try {
+            if (!ServletFileUpload.isMultipartContent(request)) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            FileItemIterator itemIterator = new ServletFileUpload().getItemIterator(request);
+            FileItemStream item = itemIterator.next();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            try (InputStream in = item.openStream()) {
+                IOUtils.copy(in, baos);
+            }
+
+            User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+            user.setProfilePicture(baos.toByteArray());
+            userService.saveUser(user);
+
+            IOUtils.closeQuietly(baos);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

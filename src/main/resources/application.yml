@@ -1,6 +1,9 @@
 spring:
   application:
     name: order-api
+  servlet:
+    multipart:
+      enabled: false
   jpa:
     hibernate:
       ddl-auto: update

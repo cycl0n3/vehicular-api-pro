@@ -32,6 +32,7 @@ public class User {
     private String name;
     private String email;
     private String role;
+    private byte[] profilePicture;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
