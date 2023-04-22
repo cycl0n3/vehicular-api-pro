@@ -39,6 +39,12 @@ public class User {
     @Column(columnDefinition = "LONGBLOB")
     private byte[] profilePicture;
 
+    @Column(columnDefinition = "VARCHAR(50) DEFAULT 'Mr.'")
+    private String title;
+
+    @Column
+    private int age;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
 

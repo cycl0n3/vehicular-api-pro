@@ -21,6 +21,8 @@ dependencies {
 	implementation("org.apache.groovy:groovy")
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+	implementation("org.apache.poi:poi:5.2.3")
+	implementation("org.apache.poi:poi-ooxml:5.2.3")
 //	implementation("commons-io:commons-io:2.11.0")
 //	implementation("commons-fileupload:commons-fileupload:1.5")
 

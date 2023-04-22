@@ -20,10 +20,10 @@ public class UserMapperImpl implements UserMapper {
 
         if (profilePicture != null) {
             String base64ProfilePicture = java.util.Base64.getEncoder().encodeToString(profilePicture);
-            return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders, base64ProfilePicture);
+            return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders, base64ProfilePicture, user.getTitle(), user.getAge());
         }
 
-        return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders, null);
+        return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(), orders, null, user.getTitle(), user.getAge());
     }
 
     private UserDto.OrderDto toUserDtoOrderDto(Order order) {

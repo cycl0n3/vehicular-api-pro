@@ -53,9 +53,6 @@ public class UserController {
         return userMapper.toUserDto(user);
     }
 
-    // file upload for the user's profile picture
-    // https://www.baeldung.com/spring-file-upload
-    // https://www.baeldung.com/spring-mvc-image-media-data
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @PostMapping("/profile-picture")
     public ResponseEntity<Void> uploadProfilePicture(
