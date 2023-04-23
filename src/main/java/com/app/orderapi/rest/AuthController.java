@@ -44,7 +44,7 @@ public class AuthController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    public AuthResponse signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.hasUserWithUsername(signUpRequest.getUsername())) {
             throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.getUsername()));
         }
@@ -56,7 +56,7 @@ public class AuthController {
         userService.saveUser(mapSignUpRequestToUser(signUpRequest));
 
         String token = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword());
-        return new AuthResponse(token);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
     private String authenticateAndGetToken(String username, String password) {
