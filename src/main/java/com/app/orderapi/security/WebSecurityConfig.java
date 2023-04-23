@@ -32,10 +32,13 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
             .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority(ADMIN, USER)
+            .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasAnyAuthority(ADMIN, USER)
 
             .requestMatchers(HttpMethod.GET, "/api/users/me").hasAnyAuthority(ADMIN, USER)
+            .requestMatchers(HttpMethod.GET, "/api/v1/users/me").hasAnyAuthority(ADMIN, USER)
 
             .requestMatchers(HttpMethod.POST, "/api/users/profile-picture").hasAnyAuthority(ADMIN, USER)
+            .requestMatchers(HttpMethod.POST, "/api/v1/users/profile-picture").hasAnyAuthority(ADMIN, USER)
 
             .requestMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
             .requestMatchers("/api/v1/orders", "/api/v1/orders/**").hasAuthority(ADMIN)
