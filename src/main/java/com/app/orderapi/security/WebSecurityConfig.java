@@ -31,19 +31,32 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority(ADMIN, USER)
-                .requestMatchers(HttpMethod.GET, "/api/users/me").hasAnyAuthority(ADMIN, USER)
-                .requestMatchers(HttpMethod.POST, "/api/users/profile-picture").hasAnyAuthority(ADMIN, USER)
-                .requestMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
-                .requestMatchers("/api/users", "/api/users/**").hasAuthority(ADMIN)
-                .requestMatchers("/public/**", "/auth/**").permitAll()
-                .requestMatchers("/api/v1/public/**", "/api/v1/auth/**").permitAll()
-                .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
-                .anyRequest().authenticated();
+            .requestMatchers(HttpMethod.POST, "/api/orders").hasAnyAuthority(ADMIN, USER)
+
+            .requestMatchers(HttpMethod.GET, "/api/users/me").hasAnyAuthority(ADMIN, USER)
+
+            .requestMatchers(HttpMethod.POST, "/api/users/profile-picture").hasAnyAuthority(ADMIN, USER)
+
+            .requestMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
+
+            .requestMatchers("/api/users", "/api/users/**").hasAuthority(ADMIN)
+
+            .requestMatchers("/public/**", "/auth/**").permitAll()
+
+            .requestMatchers("/api/v1/public/**", "/api/v1/auth/**").permitAll()
+
+            .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
+
+            .anyRequest().authenticated();
+
         http.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         http.exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
+
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
         http.cors().and().csrf().disable();
+
         return http.build();
     }
 
