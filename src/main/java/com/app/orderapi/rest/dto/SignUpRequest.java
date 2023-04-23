@@ -23,4 +23,11 @@ public class SignUpRequest {
     @Schema(example = "user3@mycompany.com")
     @Email
     private String email;
+
+    @Schema(example = "Mr. / Mrs. / Ms. / Dr. / Prof. / ...")
+    @NotBlank
+    private String title = "Prof.";
+
+    @Schema(example = "0 / 20 / 30 / 40 / 50 / 60 / 70 / 80 / 90 / 100")
+    private int age = 40;
 }

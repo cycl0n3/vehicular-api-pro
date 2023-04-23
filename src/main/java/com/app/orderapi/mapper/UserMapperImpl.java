@@ -15,6 +15,7 @@ public class UserMapperImpl implements UserMapper {
         if (user == null) {
             return null;
         }
+
         List<UserDto.OrderDto> orders = user.getOrders().stream().map(this::toUserDtoOrderDto).toList();
         byte[] profilePicture = user.getProfilePicture();
 

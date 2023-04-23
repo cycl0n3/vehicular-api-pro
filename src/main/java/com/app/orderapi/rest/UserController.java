@@ -6,9 +6,12 @@ import com.app.orderapi.model.User;
 import com.app.orderapi.rest.dto.UserDto;
 import com.app.orderapi.security.CustomUserDetails;
 import com.app.orderapi.service.UserService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -73,8 +75,8 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @PostMapping("/profile-picture")
     public ResponseEntity<Void> uploadProfilePicture(
-            @RequestPart("profile-picture") MultipartFile file,
-            @AuthenticationPrincipal CustomUserDetails currentUser) {
+        @RequestPart("profile-picture") MultipartFile file,
+        @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
             User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
             user.setProfilePicture(file.getBytes());
