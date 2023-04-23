@@ -40,8 +40,8 @@ public class WebSecurityConfig {
             .requestMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
             .requestMatchers("/api/v1/orders", "/api/v1/orders/**").hasAuthority(ADMIN)
 
-
             .requestMatchers("/api/users", "/api/users/**").hasAuthority(ADMIN)
+            .requestMatchers("/api/v1/users", "/api/v1/users/**").hasAuthority(ADMIN)
 
             .requestMatchers("/public/**", "/auth/**").permitAll()
             .requestMatchers("/api/v1/public/**", "/api/v1/auth/**").permitAll()
