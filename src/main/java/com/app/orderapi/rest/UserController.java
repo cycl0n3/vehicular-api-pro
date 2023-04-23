@@ -9,12 +9,17 @@ import com.app.orderapi.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -33,10 +38,22 @@ public class UserController {
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
-    public List<UserDto> getUsers() {
-        return userService.getUsers().stream()
-                .map(userMapper::toUserDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<Map<String, Object>> getUsers(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pagingSort = PageRequest.of(page, size);
+        Page<User> pageResult = userService.getUsers(pagingSort);
+
+        Map<String, Object> response = new HashMap<>();
+
+        response.put("users", pageResult.getContent().stream().map(userMapper::toUserDto).collect(Collectors.toList()));
+        response.put("currentPage", pageResult.getNumber());
+        response.put("totalItems", pageResult.getTotalElements());
+        response.put("itemsPerPage", pageResult.getSize());
+        response.put("totalPages", pageResult.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
