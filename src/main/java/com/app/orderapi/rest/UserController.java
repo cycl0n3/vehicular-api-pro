@@ -34,8 +34,8 @@ public class UserController {
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/me")
-    public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        return userMapper.toUserDto(userService.validateAndGetUserByUsername(currentUser.getUsername()));
+    public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
+        return ResponseEntity.ok(userMapper.toUserDto(userService.validateAndGetUserByUsername(currentUser.getUsername())));
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
@@ -60,16 +60,19 @@ public class UserController {
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/{username}")
-    public UserDto getUser(@PathVariable String username) {
-        return userMapper.toUserDto(userService.validateAndGetUserByUsername(username));
+    public ResponseEntity<UserDto> getUser(@PathVariable String username) {
+        UserDto userDto = userMapper.toUserDto(userService.validateAndGetUserByUsername(username));
+
+        return ResponseEntity.ok(userDto);
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @DeleteMapping("/{username}")
-    public UserDto deleteUser(@PathVariable String username) {
+    public ResponseEntity<UserDto> deleteUser(@PathVariable String username) {
         User user = userService.validateAndGetUserByUsername(username);
         userService.deleteUser(user);
-        return userMapper.toUserDto(user);
+
+        return ResponseEntity.ok(userMapper.toUserDto(user));
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
