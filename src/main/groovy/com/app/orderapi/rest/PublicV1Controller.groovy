@@ -22,7 +22,7 @@ class PublicV1Controller {
 
     @RequestMapping("/numberOfUsers")
     ResponseEntity<Map> getNumberOfUsers() {
-        def response = [:]
+        Map response = [:]
         response['numberOfUsers'] = userService.numberOfUsers
 
         return ResponseEntity.ok(response)
@@ -30,7 +30,7 @@ class PublicV1Controller {
 
     @RequestMapping("/numberOfOrders")
     ResponseEntity<Map> getNumberOfOrders() {
-        def response = [:]
+        Map response = [:]
         response['numberOfOrders'] = orderService.numberOfOrders
 
         return ResponseEntity.ok(response)
