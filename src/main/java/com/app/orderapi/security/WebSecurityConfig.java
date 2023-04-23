@@ -38,11 +38,12 @@ public class WebSecurityConfig {
             .requestMatchers(HttpMethod.POST, "/api/users/profile-picture").hasAnyAuthority(ADMIN, USER)
 
             .requestMatchers("/api/orders", "/api/orders/**").hasAuthority(ADMIN)
+            .requestMatchers("/api/v1/orders", "/api/v1/orders/**").hasAuthority(ADMIN)
+
 
             .requestMatchers("/api/users", "/api/users/**").hasAuthority(ADMIN)
 
             .requestMatchers("/public/**", "/auth/**").permitAll()
-
             .requestMatchers("/api/v1/public/**", "/api/v1/auth/**").permitAll()
 
             .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
