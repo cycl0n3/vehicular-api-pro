@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public long getNumberOfUsers() {
+        return userRepository.count();
+    }
+
+    @Override
     public Page<User> getUsers(Pageable pagingSort) {
         return userRepository.findAll(pagingSort);
     }

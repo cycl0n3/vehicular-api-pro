@@ -43,19 +43,11 @@ public class User {
     @Column(columnDefinition = "VARCHAR(50) DEFAULT 'Mr.'")
     private String title;
 
-    @Column
+    @Column(columnDefinition = "INT(11) DEFAULT 0")
     private int age;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders = new ArrayList<>();
-
-    /*public User(String username, String password, String name, String email, String role) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.email = email;
-        this.role = role;
-    }*/
 
     public User(String username, String password, String name, String email, String role, byte[] profilePicture, String title, int age) {
         this.username = username;

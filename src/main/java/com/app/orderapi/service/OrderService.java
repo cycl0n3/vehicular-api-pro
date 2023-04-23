@@ -8,6 +8,8 @@ public interface OrderService {
 
     List<Order> getOrders();
 
+    Long getNumberOfOrders();
+
     List<Order> getOrdersContainingText(String text);
 
     Order validateAndGetOrder(String id);
