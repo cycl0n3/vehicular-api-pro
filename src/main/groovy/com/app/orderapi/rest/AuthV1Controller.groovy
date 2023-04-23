@@ -2,10 +2,13 @@ package com.app.orderapi.rest
 
 import com.app.orderapi.exception.DuplicatedUserInfoException
 import com.app.orderapi.exception.UserNotFoundException
+
 import com.app.orderapi.model.User
+
 import com.app.orderapi.rest.dto.AuthResponse
 import com.app.orderapi.rest.dto.LoginRequest
 import com.app.orderapi.rest.dto.SignUpRequest
+
 import com.app.orderapi.security.TokenProvider
 import com.app.orderapi.security.WebSecurityConfig
 import com.app.orderapi.service.UserService
