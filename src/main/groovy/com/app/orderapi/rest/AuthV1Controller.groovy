@@ -54,7 +54,7 @@ class AuthV1Controller {
         return ResponseEntity.ok(new AuthResponse(token))
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    //@ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.hasUserWithUsername(signUpRequest.username)) {
@@ -69,7 +69,7 @@ class AuthV1Controller {
 
         def token = authenticateAndGetToken(signUpRequest.username, signUpRequest.password)
 
-        return ResponseEntity.ok(new AuthResponse(token))
+        return new ResponseEntity<AuthResponse>(new AuthResponse(token), HttpStatus.CREATED)
     }
 
     private String authenticateAndGetToken(String username, String password) {
