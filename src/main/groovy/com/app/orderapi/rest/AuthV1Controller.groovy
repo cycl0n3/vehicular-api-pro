@@ -55,7 +55,7 @@ class AuthV1Controller {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/signup")
+    @PostMapping("/register")
     ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.hasUserWithUsername(signUpRequest.username)) {
             throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.username))
