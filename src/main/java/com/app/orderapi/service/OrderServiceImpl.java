@@ -1,9 +1,13 @@
 package com.app.orderapi.service;
 
+import com.app.orderapi.model.User;
 import com.app.orderapi.repository.OrderRepository;
 import com.app.orderapi.exception.OrderNotFoundException;
 import com.app.orderapi.model.Order;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +47,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void deleteOrder(Order order) {
         orderRepository.delete(order);
+    }
+
+    @Override
+    public Page<Order> getOrdersByUser(User user, PageRequest pagingSort) {
+        return orderRepository.findAllByUser(user, pagingSort);
     }
 }

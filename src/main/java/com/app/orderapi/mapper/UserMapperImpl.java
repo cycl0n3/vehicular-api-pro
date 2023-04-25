@@ -3,8 +3,10 @@ package com.app.orderapi.mapper;
 import com.app.orderapi.model.Order;
 import com.app.orderapi.model.User;
 import com.app.orderapi.rest.dto.UserDto;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -16,7 +18,9 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
 
-        List<UserDto.OrderDto> orders = user.getOrders().stream().map(this::toUserDtoOrderDto).toList();
+        //List<UserDto.OrderDto> orders = user.getOrders().stream().map(this::toUserDtoOrderDto).toList();
+        List<UserDto.OrderDto> orders = Lists.newArrayList();
+
         byte[] profilePicture = user.getProfilePicture();
 
         if (profilePicture != null) {

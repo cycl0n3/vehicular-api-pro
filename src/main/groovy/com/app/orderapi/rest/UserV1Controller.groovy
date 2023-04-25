@@ -54,11 +54,11 @@ class UserV1Controller {
 
         def response = [:]
 
+        response["users"] = pageResult.collect(userMapper::toUserDto)
         response["currentPage"] = pageResult.number
         response["totalItems"] = pageResult.totalElements
         response["itemsPerPage"] = pageResult.size
         response["totalPages"] = pageResult.totalPages
-        response["users"] = pageResult.collect(userMapper::toUserDto)
 
         return ResponseEntity.ok(response)
     }

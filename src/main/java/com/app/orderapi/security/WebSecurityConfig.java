@@ -47,6 +47,7 @@ public class WebSecurityConfig {
 
             //.requestMatchers(HttpMethod.GET, "/api/users/me").hasAnyAuthority(ADMIN, USER)
             .requestMatchers(HttpMethod.GET, "/api/v1/users/me").hasAnyAuthority(ADMIN, USER)
+            .requestMatchers(HttpMethod.GET, "/api/v1/orders/me").hasAnyAuthority(ADMIN, USER)
 
             //.requestMatchers(HttpMethod.POST, "/api/users/profile-picture").hasAnyAuthority(ADMIN, USER)
             .requestMatchers(HttpMethod.POST, "/api/v1/users/profile-picture").hasAnyAuthority(ADMIN, USER)

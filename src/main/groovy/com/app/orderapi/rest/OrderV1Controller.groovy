@@ -13,7 +13,7 @@ import com.app.orderapi.service.UserService
 import jakarta.validation.Valid
 
 import org.springframework.beans.factory.annotation.Autowired
-
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 
@@ -39,6 +39,28 @@ class OrderV1Controller {
         def orders = (text == null) ? orderService.findAll() : orderService.getOrdersContainingText(text)
 
         return ResponseEntity.ok(orders.collect(orderMapper::toOrderDto))
+    }
+
+    @GetMapping("/me")
+    ResponseEntity<Map> getMyOrders(
+        @AuthenticationPrincipal CustomUserDetails currentUser,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size
+    ) {
+        def user = userService.validateAndGetUserByUsername(currentUser.username)
+
+        def pagingSort = PageRequest.of(page, size)
+        def pageResult = orderService.getOrdersByUser(user, pagingSort)
+
+        def response = [:]
+
+        response['orders'] = pageResult.content.collect(orderMapper::toOrderDto)
+        response['currentPage'] = pageResult.number
+        response['totalItems'] = pageResult.totalElements
+        response['itemsPerPage'] = pageResult.size
+        response['totalPages'] = pageResult.totalPages
+
+        return ResponseEntity.ok(response)
     }
 
     @ResponseStatus(HttpStatus.CREATED)
