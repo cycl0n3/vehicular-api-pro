@@ -22,6 +22,6 @@ public class OrderMapperImpl implements OrderMapper {
             return null;
         }
         OrderDto.UserDto userDto = new OrderDto.UserDto(order.getUser().getUsername());
-        return new OrderDto(order.getId(), order.getDescription(), userDto, order.getCreatedAt());
+        return new OrderDto(order.getId(), order.getDescription(), userDto, order.getCreatedAt(), order.getStatus());
     }
 }

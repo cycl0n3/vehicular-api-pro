@@ -26,6 +26,9 @@ public class Order {
     @Column(name = "created_at", nullable = false, updatable = false)
     private ZonedDateTime createdAt;
 
+    @Column(name = "status", nullable = false, columnDefinition = "int default 0")
+    private int status;
+
     public Order(String description) {
         this.description = description;
     }

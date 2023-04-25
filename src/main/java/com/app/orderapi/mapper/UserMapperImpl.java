@@ -31,6 +31,6 @@ public class UserMapperImpl implements UserMapper {
         if (order == null) {
             return null;
         }
-        return new UserDto.OrderDto(order.getId(), order.getDescription(), order.getCreatedAt());
+        return new UserDto.OrderDto(order.getId(), order.getDescription(), order.getCreatedAt(), order.getStatus());
     }
 }
