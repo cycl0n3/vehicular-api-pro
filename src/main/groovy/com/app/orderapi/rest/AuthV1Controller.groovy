@@ -53,7 +53,6 @@ class AuthV1Controller {
         return ResponseEntity.ok(new AuthResponse(token))
     }
 
-    //@ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/register")
     ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.hasUserWithUsername(signUpRequest.username)) {

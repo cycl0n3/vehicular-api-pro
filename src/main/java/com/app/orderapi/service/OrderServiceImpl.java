@@ -51,6 +51,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<Order> getOrdersByUser(User user, PageRequest pagingSort) {
-        return orderRepository.findAllByUser(user, pagingSort);
+        return orderRepository.findAllByUserOrderByCreatedAtDesc(user, pagingSort);
+    }
+
+    @Override
+    public Long getNumberOfOrdersByUser(User user) {
+        return orderRepository.countByUser(user);
     }
 }

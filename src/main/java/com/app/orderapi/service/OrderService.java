@@ -23,4 +23,6 @@ public interface OrderService {
     void deleteOrder(Order order);
 
     Page<Order> getOrdersByUser(User user, PageRequest pagingSort);
+
+    Long getNumberOfOrdersByUser(User user);
 }

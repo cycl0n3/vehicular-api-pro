@@ -16,7 +16,9 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     List<Order> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
 
-    Page<Order> findAllByUser(User user, PageRequest pageRequest);
+    Page<Order> findAllByUserOrderByCreatedAtDesc(User user, PageRequest pageRequest);
 
     List<Order> findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(String id, String description);
+
+    Long countByUser(User user);
 }
