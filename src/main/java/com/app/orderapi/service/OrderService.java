@@ -25,4 +25,10 @@ public interface OrderService {
     Page<Order> getOrdersByUser(User user, PageRequest pagingSort);
 
     Long getNumberOfOrdersByUser(User user);
+
+    Long getNumberOfAcceptedOrdersByUser(User user);
+
+    Long getNumberOfRejectedOrdersByUser(User user);
+
+    Long getNumberOfPendingOrdersByUser(User user);
 }

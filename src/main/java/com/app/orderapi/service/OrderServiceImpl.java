@@ -58,4 +58,19 @@ public class OrderServiceImpl implements OrderService {
     public Long getNumberOfOrdersByUser(User user) {
         return orderRepository.countByUser(user);
     }
+
+    @Override
+    public Long getNumberOfAcceptedOrdersByUser(User user) {
+        return orderRepository.countByUserAndStatus(user, Order.Status.ACCEPTED);
+    }
+
+    @Override
+    public Long getNumberOfRejectedOrdersByUser(User user) {
+        return orderRepository.countByUserAndStatus(user, Order.Status.REJECTED);
+    }
+
+    @Override
+    public Long getNumberOfPendingOrdersByUser(User user) {
+        return orderRepository.countByUserAndStatus(user, Order.Status.PENDING);
+    }
 }

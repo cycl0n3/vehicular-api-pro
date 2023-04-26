@@ -12,6 +12,12 @@ import java.time.ZonedDateTime;
 @Table(name = "orders")
 public class Order {
 
+    public static class Status {
+        public static final int PENDING = 0;
+        public static final int ACCEPTED = 1;
+        public static final int REJECTED = -1;
+    }
+
     @Id
     @Column(name = "id", nullable = false, updatable = false)
     private String id;

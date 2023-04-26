@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserMapperImpl implements UserMapper {
@@ -27,10 +28,16 @@ public class UserMapperImpl implements UserMapper {
             return null;
         }
 
-        //List<UserDto.OrderDto> orders = user.getOrders().stream().map(this::toUserDtoOrderDto).toList();
-        List<UserDto.OrderDto> orders = Lists.newArrayList();
-
         Long orderCount = orderService.getNumberOfOrdersByUser(user);
+
+        Long acceptedOrderCount = orderService.getNumberOfAcceptedOrdersByUser(user);
+        Long rejectedOrderCount = orderService.getNumberOfRejectedOrdersByUser(user);
+        Long pendingOrderCount = orderService.getNumberOfPendingOrdersByUser(user);
+
+        Map<String, Long> orderCounts = Map.of("orderCount", orderCount,
+            "acceptedOrderCount", acceptedOrderCount,
+            "rejectedOrderCount", rejectedOrderCount,
+            "pendingOrderCount", pendingOrderCount);
 
         byte[] profilePicture = user.getProfilePicture();
 
@@ -38,11 +45,13 @@ public class UserMapperImpl implements UserMapper {
             String base64ProfilePicture = java.util.Base64.getEncoder().encodeToString(profilePicture);
 
             return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(),
-                orderCount, base64ProfilePicture, user.getTitle(), user.getAge());
+                orderCounts,
+                base64ProfilePicture, user.getTitle(), user.getAge());
         }
 
         return new UserDto(user.getId(), user.getUsername(), user.getName(), user.getEmail(), user.getRole(),
-            orderCount, null, user.getTitle(), user.getAge());
+            orderCounts,
+            null, user.getTitle(), user.getAge());
     }
 
     private UserDto.OrderDto toUserDtoOrderDto(Order order) {

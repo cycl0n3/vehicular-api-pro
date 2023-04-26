@@ -21,4 +21,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(String id, String description);
 
     Long countByUser(User user);
+
+    Long countByUserAndStatus(User user, Integer status);
 }
