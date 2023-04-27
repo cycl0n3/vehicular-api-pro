@@ -31,7 +31,7 @@ class PublicV1Controller {
     @RequestMapping("/numberOfOrders")
     ResponseEntity<Map> getNumberOfOrders() {
         Map response = [:]
-        response['numberOfOrders'] = orderService.numberOfOrders
+        response['numberOfOrders'] = orderService.totalNumberOfOrders
 
         return ResponseEntity.ok(response)
     }

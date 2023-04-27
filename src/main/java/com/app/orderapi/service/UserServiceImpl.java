@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
@@ -28,22 +28,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findAll(PageRequest paging) {
+    public Page<User> findAllUsersPaged(PageRequest paging) {
         return userRepository.findAll(paging);
     }
 
     @Override
-    public Page<User> findAll(PageRequest paging, String search) {
+    public Page<User> findAllUsersByTextPaged(PageRequest paging, String search) {
         return userRepository.findAllByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, paging);
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsernameOrEmail(String username) {
+    public User findUserByUsernameOrEmail(String username) {
         Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()) {

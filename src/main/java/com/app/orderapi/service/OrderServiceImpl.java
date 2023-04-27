@@ -19,17 +19,17 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public List<Order> getOrders() {
+    public List<Order> findAllOrders() {
         return orderRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Override
-    public Long getNumberOfOrders() {
+    public Long getTotalNumberOfOrders() {
         return orderRepository.count();
     }
 
     @Override
-    public List<Order> getOrdersContainingText(String text) {
+    public List<Order> findOrdersContainingText(String text) {
         return orderRepository.findByIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAt(text, text);
     }
 
@@ -50,12 +50,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> findOrdersByUser(User user, PageRequest paging) {
+    public Page<Order> findAllOrdersByUserPaged(User user, PageRequest paging) {
         return orderRepository.findAllByUserOrderByCreatedAtDesc(user, paging);
     }
 
     @Override
-    public Page<Order> findOrdersByUser(User user, String searchQuery, PageRequest paging) {
+    public Page<Order> findAllOrdersByUserAndTextPaged(User user, String searchQuery, PageRequest paging) {
         return orderRepository.findAllByUserAndDescriptionContainingIgnoreCaseOrderByCreatedAtDesc(user, searchQuery, paging);
     }
 
@@ -80,12 +80,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> findAll(Pageable pageable) {
+    public Page<Order> findAllordersPaged(Pageable pageable) {
         return orderRepository.findAll(pageable);
     }
 
     @Override
-    public Page<Order> findAllByText(String text, PageRequest paging) {
+    public Page<Order> findAllOrdersByTextPaged(String text, PageRequest paging) {
         return orderRepository.findAllByDescriptionContainingIgnoreCase(text, paging);
     }
 }

@@ -11,12 +11,12 @@ import java.util.List;
 public interface OrderService {
 
     @Deprecated
-    List<Order> getOrders();
+    List<Order> findAllOrders();
 
-    Long getNumberOfOrders();
+    Long getTotalNumberOfOrders();
 
     @Deprecated
-    List<Order> getOrdersContainingText(String text);
+    List<Order> findOrdersContainingText(String text);
 
     Order validateAndGetOrder(String id);
 
@@ -24,9 +24,9 @@ public interface OrderService {
 
     void deleteOrder(Order order);
 
-    Page<Order> findOrdersByUser(User user, PageRequest paging);
+    Page<Order> findAllOrdersByUserPaged(User user, PageRequest paging);
 
-    Page<Order> findOrdersByUser(User user, String searchQuery, PageRequest paging);
+    Page<Order> findAllOrdersByUserAndTextPaged(User user, String searchQuery, PageRequest paging);
 
     Long getNumberOfOrdersByUser(User user);
 
@@ -36,7 +36,7 @@ public interface OrderService {
 
     Long getNumberOfPendingOrdersByUser(User user);
 
-    Page<Order> findAll(Pageable pageable);
+    Page<Order> findAllordersPaged(Pageable pageable);
 
-    Page<Order> findAllByText(String text, PageRequest paging);
+    Page<Order> findAllOrdersByTextPaged(String text, PageRequest paging);
 }

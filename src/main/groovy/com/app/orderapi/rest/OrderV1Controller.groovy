@@ -46,7 +46,7 @@ class OrderV1Controller {
 
         def paging = PageRequest.of(page, size)
 
-        def pageResult = empty ? orderService.findAll(paging) : orderService.findAllByText(text, paging)
+        def pageResult = empty ? orderService.findAllordersPaged(paging) : orderService.findAllOrdersByTextPaged(text, paging)
 
         def response = [:]
 
@@ -68,11 +68,11 @@ class OrderV1Controller {
     ) {
         def empty = text == null || text.isEmpty()
 
-        def user = userService.findByUsernameOrEmail(currentUser.username)
+        def user = userService.findUserByUsernameOrEmail(currentUser.username)
 
         def paging = PageRequest.of(page, size)
 
-        def pageResult = empty ? orderService.findOrdersByUser(user, paging) : orderService.findOrdersByUser(user, text, paging)
+        def pageResult = empty ? orderService.findAllOrdersByUserPaged(user, paging) : orderService.findAllOrdersByUserAndTextPaged(user, text, paging)
 
         def response = [:]
 
@@ -95,11 +95,11 @@ class OrderV1Controller {
     ) {
         def empty = text == null || text.isEmpty()
 
-        def user = userService.findByUsernameOrEmail(username)
+        def user = userService.findUserByUsernameOrEmail(username)
 
         def paging = PageRequest.of(page, size)
 
-        def pageResult = empty ? orderService.findOrdersByUser(user, paging) : orderService.findOrdersByUser(user, text, paging)
+        def pageResult = empty ? orderService.findAllOrdersByUserPaged(user, paging) : orderService.findAllOrdersByUserAndTextPaged(user, text, paging)
 
         def response = [:]
 
@@ -118,7 +118,7 @@ class OrderV1Controller {
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @Valid @RequestBody CreateOrderRequest createOrderRequest
     ) {
-        def user = userService.findByUsernameOrEmail(currentUser.username)
+        def user = userService.findUserByUsernameOrEmail(currentUser.username)
         def order = orderMapper.toOrder(createOrderRequest)
 
         order.id = UUID.randomUUID().toString()

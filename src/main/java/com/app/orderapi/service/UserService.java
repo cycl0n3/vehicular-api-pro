@@ -9,25 +9,26 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> findAll();
+    @Deprecated
+    List<User> findAllUsers();
 
     long getNumberOfUsers();
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findUserByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findUserByEmail(String email);
 
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
 
-    User findByUsernameOrEmail(String username);
+    User findUserByUsernameOrEmail(String username);
 
     User saveUser(User user);
 
     void deleteUser(User user);
 
-    Page<User> findAll(PageRequest paging);
+    Page<User> findAllUsersPaged(PageRequest paging);
 
-    Page<User> findAll(PageRequest paging, String search);
+    Page<User> findAllUsersByTextPaged(PageRequest paging, String search);
 }

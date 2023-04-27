@@ -53,7 +53,7 @@ public class OrderController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping
     public ResponseEntity<List<OrderDto>> getOrders(@RequestParam(value = "text", required = false) String text) {
-        List<Order> orders = (text == null) ? orderService.getOrders() : orderService.getOrdersContainingText(text);
+        List<Order> orders = (text == null) ? orderService.findAllOrders() : orderService.findOrdersContainingText(text);
 
         return ResponseEntity.ok(orders.stream()
                 .map(orderMapper::toOrderDto)
@@ -65,7 +65,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(@AuthenticationPrincipal CustomUserDetails currentUser,
                                 @Valid @RequestBody CreateOrderRequest createOrderRequest) {
-        User user = userService.findByUsernameOrEmail(currentUser.getUsername());
+        User user = userService.findUserByUsernameOrEmail(currentUser.getUsername());
         Order order = orderMapper.toOrder(createOrderRequest);
         order.setId(UUID.randomUUID().toString());
         order.setUser(user);

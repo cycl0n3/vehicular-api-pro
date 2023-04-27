@@ -34,7 +34,7 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/me")
     public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        return ResponseEntity.ok(userMapper.toUserDto(userService.findByUsernameOrEmail(currentUser.getUsername())));
+        return ResponseEntity.ok(userMapper.toUserDto(userService.findUserByUsernameOrEmail(currentUser.getUsername())));
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
@@ -44,7 +44,7 @@ public class UserController {
         @RequestParam(defaultValue = "10") int size
     ) {
         PageRequest pagingSort = PageRequest.of(page, size);
-        Page<User> pageResult = userService.findAll(pagingSort);
+        Page<User> pageResult = userService.findAllUsersPaged(pagingSort);
 
         Map<String, Object> response = new HashMap<>();
 
@@ -60,7 +60,7 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/{username}")
     public ResponseEntity<UserDto> getUser(@PathVariable String username) {
-        UserDto userDto = userMapper.toUserDto(userService.findByUsernameOrEmail(username));
+        UserDto userDto = userMapper.toUserDto(userService.findUserByUsernameOrEmail(username));
 
         return ResponseEntity.ok(userDto);
     }
@@ -68,7 +68,7 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @DeleteMapping("/{username}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable String username) {
-        User user = userService.findByUsernameOrEmail(username);
+        User user = userService.findUserByUsernameOrEmail(username);
         userService.deleteUser(user);
 
         return ResponseEntity.ok(userMapper.toUserDto(user));
@@ -80,7 +80,7 @@ public class UserController {
         @RequestPart("profile-picture") MultipartFile file,
         @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
-            User user = userService.findByUsernameOrEmail(currentUser.getUsername());
+            User user = userService.findUserByUsernameOrEmail(currentUser.getUsername());
             user.setProfilePicture(file.getBytes());
             userService.saveUser(user);
 

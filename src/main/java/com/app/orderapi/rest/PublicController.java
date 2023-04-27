@@ -18,11 +18,11 @@ public class PublicController {
 
     @GetMapping("/numberOfUsers")
     public ResponseEntity<Integer> getNumberOfUsers() {
-        return ResponseEntity.ok(userService.findAll().size());
+        return ResponseEntity.ok(userService.findAllUsers().size());
     }
 
     @GetMapping("/numberOfOrders")
     public ResponseEntity<Integer> getNumberOfOrders() {
-        return ResponseEntity.ok(orderService.getOrders().size());
+        return ResponseEntity.ok(orderService.findAllOrders().size());
     }
 }
