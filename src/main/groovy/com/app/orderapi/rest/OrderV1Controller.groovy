@@ -83,6 +83,33 @@ class OrderV1Controller {
         return ResponseEntity.ok(response)
     }
 
+    @GetMapping("/other/{username}")
+    ResponseEntity<Map> findOrdersByUser(
+        @AuthenticationPrincipal CustomUserDetails currentUser,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @PathVariable String username,
+        @RequestParam(value = "searchQuery", required = false) String text
+    ) {
+        def empty = text == null || text.isEmpty()
+
+        def user = userService.validateAndGetUserByUsername(username)
+
+        def paging = PageRequest.of(page, size)
+
+        def pageResult = empty ? orderService.findOrdersByUser(user, paging) : orderService.findOrdersByUser(user, text, paging)
+
+        def response = [:]
+
+        response['orders'] = pageResult.content.collect(orderMapper::toOrderDto)
+        response['currentPage'] = pageResult.number
+        response['totalItems'] = pageResult.totalElements
+        response['itemsPerPage'] = pageResult.size
+        response['totalPages'] = pageResult.totalPages
+
+        return ResponseEntity.ok(response)
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     ResponseEntity<OrderDto> createOrder(
