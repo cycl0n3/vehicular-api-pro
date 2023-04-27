@@ -88,4 +88,16 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> findAllOrdersByTextPaged(String text, PageRequest paging) {
         return orderRepository.findAllByDescriptionContainingIgnoreCase(text, paging);
     }
+
+    @Override
+    public Order acceptOrder(Order order) {
+        order.setStatus(Order.Status.ACCEPTED);
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public Order rejectOrder(Order order) {
+        order.setStatus(Order.Status.REJECTED);
+        return orderRepository.save(order);
+    }
 }

@@ -1,7 +1,7 @@
 package com.app.orderapi.rest
 
 import com.app.orderapi.mapper.OrderMapper
-
+import com.app.orderapi.model.Order
 import com.app.orderapi.rest.dto.CreateOrderRequest
 import com.app.orderapi.rest.dto.OrderDto
 
@@ -127,12 +127,47 @@ class OrderV1Controller {
         return ResponseEntity.ok(orderMapper.toOrderDto(orderService.saveOrder(order)))
     }
 
+    @PostMapping("/{username}/create")
+    ResponseEntity<OrderDto> createOrderForUser(
+        @AuthenticationPrincipal CustomUserDetails currentUser,
+        @PathVariable String username,
+        @Valid @RequestBody CreateOrderRequest createOrderRequest
+    ) {
+        def user = userService.findUserByUsernameOrEmail(username)
+        def order = orderMapper.toOrder(createOrderRequest)
+
+        order.id = UUID.randomUUID().toString()
+        order.user = user
+
+        return ResponseEntity.ok(orderMapper.toOrderDto(orderService.saveOrder(order)))
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<OrderDto> deleteOrders(
         @PathVariable UUID id
     ) {
         def order = orderService.validateAndGetOrder(id.toString())
         orderService.deleteOrder(order)
+
+        return ResponseEntity.ok(orderMapper.toOrderDto(order))
+    }
+
+    @PostMapping("/{id}/accept")
+    ResponseEntity<OrderDto> acceptOrder(
+        @PathVariable UUID id
+    ) {
+        def order = orderService.validateAndGetOrder(id.toString())
+        order = orderService.acceptOrder(order)
+
+        return ResponseEntity.ok(orderMapper.toOrderDto(order))
+    }
+
+    @PostMapping("/{id}/reject")
+    ResponseEntity<OrderDto> rejectOrder(
+        @PathVariable UUID id
+    ) {
+        def order = orderService.validateAndGetOrder(id.toString())
+        order = orderService.rejectOrder(order)
 
         return ResponseEntity.ok(orderMapper.toOrderDto(order))
     }

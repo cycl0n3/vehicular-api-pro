@@ -39,4 +39,8 @@ public interface OrderService {
     Page<Order> findAllordersPaged(Pageable pageable);
 
     Page<Order> findAllOrdersByTextPaged(String text, PageRequest paging);
+
+    Order acceptOrder(Order order);
+
+    Order rejectOrder(Order order);
 }
