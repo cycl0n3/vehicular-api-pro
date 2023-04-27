@@ -22,7 +22,7 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!userService.findAllUsers().isEmpty()) {
+        if (!userService.findAll().isEmpty()) {
             return;
         }
 

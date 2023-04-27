@@ -6,7 +6,6 @@ import com.app.orderapi.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<User> findAllUsers() {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
@@ -29,46 +28,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findAllUsers(PageRequest paging) {
+    public Page<User> findAll(PageRequest paging) {
         return userRepository.findAll(paging);
     }
 
     @Override
-    public Page<User> findAllUsers(PageRequest paging, String search) {
+    public Page<User> findAll(PageRequest paging, String search) {
         return userRepository.findAllByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, paging);
     }
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public boolean hasUserWithUsername(String username) {
+    public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
     @Override
-    public boolean hasUserWithEmail(String email) {
+    public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
     @Override
-    public User validateAndGetUserByUsername(String username) {
-//        return getUserByUsername(username)
-//                .orElseThrow(() -> new UserNotFoundException(String.format("User with username %s not found", username)));
-
-        Optional<User> user = getUserByUsername(username);
+    public User findByUsernameOrEmail(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isPresent()) {
             return user.get();
         } else {
-            user = getUserByEmail(username);
+            user = userRepository.findByEmail(username);
 
             if (user.isPresent()) {
                 return user.get();

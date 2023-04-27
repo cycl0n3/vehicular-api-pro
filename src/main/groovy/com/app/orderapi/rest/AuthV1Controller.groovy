@@ -55,11 +55,11 @@ class AuthV1Controller {
 
     @PostMapping("/register")
     ResponseEntity<AuthResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
-        if (userService.hasUserWithUsername(signUpRequest.username)) {
+        if (userService.existsByUsername(signUpRequest.username)) {
             throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.username))
         }
 
-        if (userService.hasUserWithEmail(signUpRequest.email)) {
+        if (userService.existsByEmail(signUpRequest.email)) {
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.email))
         }
 

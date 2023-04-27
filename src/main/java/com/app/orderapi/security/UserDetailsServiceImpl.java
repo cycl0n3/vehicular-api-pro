@@ -23,10 +23,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //        User user = userService.getUserByUsername(username)
 //                .orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s not found", username)));
 
-        User user = userService.getUserByUsername(username).orElse(null);
+        User user = userService.findByUsername(username).orElse(null);
 
         if (user == null) {
-            user = userService.getUserByEmail(username).orElse(null);
+            user = userService.findByEmail(username).orElse(null);
         }
 
         if (user == null) {

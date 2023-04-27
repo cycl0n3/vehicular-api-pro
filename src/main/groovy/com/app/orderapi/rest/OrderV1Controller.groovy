@@ -68,7 +68,7 @@ class OrderV1Controller {
     ) {
         def empty = text == null || text.isEmpty()
 
-        def user = userService.validateAndGetUserByUsername(currentUser.username)
+        def user = userService.findByUsernameOrEmail(currentUser.username)
 
         def paging = PageRequest.of(page, size)
 
@@ -95,7 +95,7 @@ class OrderV1Controller {
     ) {
         def empty = text == null || text.isEmpty()
 
-        def user = userService.validateAndGetUserByUsername(username)
+        def user = userService.findByUsernameOrEmail(username)
 
         def paging = PageRequest.of(page, size)
 
@@ -118,7 +118,7 @@ class OrderV1Controller {
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @Valid @RequestBody CreateOrderRequest createOrderRequest
     ) {
-        def user = userService.validateAndGetUserByUsername(currentUser.username)
+        def user = userService.findByUsernameOrEmail(currentUser.username)
         def order = orderMapper.toOrder(createOrderRequest)
 
         order.id = UUID.randomUUID().toString()

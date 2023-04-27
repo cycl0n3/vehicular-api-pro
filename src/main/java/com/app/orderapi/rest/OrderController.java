@@ -65,7 +65,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(@AuthenticationPrincipal CustomUserDetails currentUser,
                                 @Valid @RequestBody CreateOrderRequest createOrderRequest) {
-        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        User user = userService.findByUsernameOrEmail(currentUser.getUsername());
         Order order = orderMapper.toOrder(createOrderRequest);
         order.setId(UUID.randomUUID().toString());
         order.setUser(user);

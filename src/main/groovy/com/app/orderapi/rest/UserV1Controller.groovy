@@ -39,7 +39,7 @@ class UserV1Controller {
 
     @GetMapping("/me")
     ResponseEntity<UserDto> findMe(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        def userDto = userMapper.toUserDto(userService.validateAndGetUserByUsername(currentUser.username))
+        def userDto = userMapper.toUserDto(userService.findByUsernameOrEmail(currentUser.username))
         return ResponseEntity.ok(userDto)
     }
 
@@ -53,7 +53,7 @@ class UserV1Controller {
 
         def paging = PageRequest.of(page, size)
 
-        def pageResult = empty ? userService.findAllUsers(paging) : userService.findAllUsers(paging, text)
+        def pageResult = empty ? userService.findAll(paging) : userService.findAll(paging, text)
 
         def response = [:]
 
@@ -68,14 +68,14 @@ class UserV1Controller {
 
     @GetMapping("/{username}")
     ResponseEntity<UserDto> findUser(@PathVariable String username) {
-        def userDto = userMapper.toUserDto(userService.validateAndGetUserByUsername(username))
+        def userDto = userMapper.toUserDto(userService.findByUsernameOrEmail(username))
 
         return ResponseEntity.ok(userDto)
     }
 
     @DeleteMapping("/{username}")
     ResponseEntity<UserDto> deleteUser(@PathVariable String username) {
-        def user = userService.validateAndGetUserByUsername(username)
+        def user = userService.findByUsernameOrEmail(username)
         userService.deleteUser(user)
 
         return ResponseEntity.ok(userMapper.toUserDto(user))
@@ -86,7 +86,7 @@ class UserV1Controller {
         @RequestPart("profile-picture") MultipartFile file,
         @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
-            def user = userService.validateAndGetUserByUsername(currentUser.username)
+            def user = userService.findByUsernameOrEmail(currentUser.username)
             user.profilePicture = file.bytes
 
             userService.saveUser(user)

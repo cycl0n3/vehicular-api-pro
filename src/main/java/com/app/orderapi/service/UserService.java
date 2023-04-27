@@ -3,32 +3,31 @@ package com.app.orderapi.service;
 import com.app.orderapi.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
 
-    List<User> findAllUsers();
+    List<User> findAll();
 
     long getNumberOfUsers();
 
-    Optional<User> getUserByUsername(String username);
+    Optional<User> findByUsername(String username);
 
-    Optional<User> getUserByEmail(String email);
+    Optional<User> findByEmail(String email);
 
-    boolean hasUserWithUsername(String username);
+    boolean existsByUsername(String username);
 
-    boolean hasUserWithEmail(String email);
+    boolean existsByEmail(String email);
 
-    User validateAndGetUserByUsername(String username);
+    User findByUsernameOrEmail(String username);
 
     User saveUser(User user);
 
     void deleteUser(User user);
 
-    Page<User> findAllUsers(PageRequest paging);
+    Page<User> findAll(PageRequest paging);
 
-    Page<User> findAllUsers(PageRequest paging, String search);
+    Page<User> findAll(PageRequest paging, String search);
 }

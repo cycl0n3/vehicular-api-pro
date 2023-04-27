@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,7 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/me")
     public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
-        return ResponseEntity.ok(userMapper.toUserDto(userService.validateAndGetUserByUsername(currentUser.getUsername())));
+        return ResponseEntity.ok(userMapper.toUserDto(userService.findByUsernameOrEmail(currentUser.getUsername())));
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
@@ -45,7 +44,7 @@ public class UserController {
         @RequestParam(defaultValue = "10") int size
     ) {
         PageRequest pagingSort = PageRequest.of(page, size);
-        Page<User> pageResult = userService.findAllUsers(pagingSort);
+        Page<User> pageResult = userService.findAll(pagingSort);
 
         Map<String, Object> response = new HashMap<>();
 
@@ -61,7 +60,7 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @GetMapping("/{username}")
     public ResponseEntity<UserDto> getUser(@PathVariable String username) {
-        UserDto userDto = userMapper.toUserDto(userService.validateAndGetUserByUsername(username));
+        UserDto userDto = userMapper.toUserDto(userService.findByUsernameOrEmail(username));
 
         return ResponseEntity.ok(userDto);
     }
@@ -69,7 +68,7 @@ public class UserController {
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @DeleteMapping("/{username}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable String username) {
-        User user = userService.validateAndGetUserByUsername(username);
+        User user = userService.findByUsernameOrEmail(username);
         userService.deleteUser(user);
 
         return ResponseEntity.ok(userMapper.toUserDto(user));
@@ -81,7 +80,7 @@ public class UserController {
         @RequestPart("profile-picture") MultipartFile file,
         @AuthenticationPrincipal CustomUserDetails currentUser) {
         try {
-            User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+            User user = userService.findByUsernameOrEmail(currentUser.getUsername());
             user.setProfilePicture(file.getBytes());
             userService.saveUser(user);
 
