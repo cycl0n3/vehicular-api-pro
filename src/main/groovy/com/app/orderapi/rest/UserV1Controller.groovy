@@ -47,7 +47,7 @@ class UserV1Controller {
     ResponseEntity<Map> findAllUsers(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(value = "text", required = false) String text
+        @RequestParam(value = "searchQuery", required = false) String text
     ) {
         def empty = text == null || text.isEmpty()
 

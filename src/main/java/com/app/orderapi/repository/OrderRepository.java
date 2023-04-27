@@ -14,8 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     List<Order> findAllByOrderByCreatedAtDesc();
 
-    Page<Order> findAll(PageRequest pageRequest);
-
     Page<Order> findAllByDescriptionContainingIgnoreCase(String text, PageRequest pageRequest);
 
     Page<Order> findAllByUserOrderByCreatedAtDesc(User user, PageRequest pageRequest);
