@@ -50,8 +50,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> getOrdersByUser(User user, PageRequest pagingSort) {
-        return orderRepository.findAllByUserOrderByCreatedAtDesc(user, pagingSort);
+    public Page<Order> findOrdersByUser(User user, PageRequest paging) {
+        return orderRepository.findAllByUserOrderByCreatedAtDesc(user, paging);
     }
 
     @Override
@@ -72,5 +72,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Long getNumberOfPendingOrdersByUser(User user) {
         return orderRepository.countByUserAndStatus(user, Order.Status.PENDING);
+    }
+
+    @Override
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Order> findAllByDescription(String text, PageRequest paging) {
+        return orderRepository.findAllByDescriptionContainingIgnoreCase(text, paging);
     }
 }

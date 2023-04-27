@@ -22,7 +22,7 @@ public interface OrderService {
 
     void deleteOrder(Order order);
 
-    Page<Order> getOrdersByUser(User user, PageRequest pagingSort);
+    Page<Order> findOrdersByUser(User user, PageRequest paging);
 
     Long getNumberOfOrdersByUser(User user);
 
@@ -31,4 +31,8 @@ public interface OrderService {
     Long getNumberOfRejectedOrdersByUser(User user);
 
     Long getNumberOfPendingOrdersByUser(User user);
+
+    Page<Order> findAll(Pageable pageable);
+
+    Page<Order> findAllByDescription(String text, PageRequest paging);
 }

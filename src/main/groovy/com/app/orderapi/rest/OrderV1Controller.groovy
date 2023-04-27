@@ -35,14 +35,30 @@ class OrderV1Controller {
     OrderMapper orderMapper
 
     @GetMapping
-    ResponseEntity<List> getOrders(@RequestParam(value = "text", required = false) String text) {
-        def orders = (text == null) ? orderService.findAll() : orderService.getOrdersContainingText(text)
+    ResponseEntity<Map> findAllOrders(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(value = "text", required = false) String text
+    ) {
+        def paging = PageRequest.of(page, size)
 
-        return ResponseEntity.ok(orders.collect(orderMapper::toOrderDto))
+        def empty = text == null || text.isEmpty()
+
+        def pageResult = empty ? orderService.findAll(paging) : orderService.findAllByDescription(text, paging)
+
+        def response = [:]
+
+        response['orders'] = pageResult.content.collect(orderMapper::toOrderDto)
+        response['currentPage'] = pageResult.number
+        response['totalItems'] = pageResult.totalElements
+        response['itemsPerPage'] = pageResult.size
+        response['totalPages'] = pageResult.totalPages
+
+        return ResponseEntity.ok(response)
     }
 
     @GetMapping("/me")
-    ResponseEntity<Map> getMyOrders(
+    ResponseEntity<Map> findMyOrders(
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size
@@ -50,7 +66,7 @@ class OrderV1Controller {
         def user = userService.validateAndGetUserByUsername(currentUser.username)
 
         def pagingSort = PageRequest.of(page, size)
-        def pageResult = orderService.getOrdersByUser(user, pagingSort)
+        def pageResult = orderService.findOrdersByUser(user, pagingSort)
 
         def response = [:]
 
@@ -65,8 +81,10 @@ class OrderV1Controller {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    ResponseEntity<OrderDto> createOrder(@AuthenticationPrincipal CustomUserDetails currentUser,
-                                         @Valid @RequestBody CreateOrderRequest createOrderRequest) {
+    ResponseEntity<OrderDto> createOrder(
+        @AuthenticationPrincipal CustomUserDetails currentUser,
+        @Valid @RequestBody CreateOrderRequest createOrderRequest
+    ) {
         def user = userService.validateAndGetUserByUsername(currentUser.username)
         def order = orderMapper.toOrder(createOrderRequest)
 
@@ -77,7 +95,9 @@ class OrderV1Controller {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<OrderDto> deleteOrders(@PathVariable UUID id) {
+    ResponseEntity<OrderDto> deleteOrders(
+        @PathVariable UUID id
+    ) {
         def order = orderService.validateAndGetOrder(id.toString())
         orderService.deleteOrder(order)
 
