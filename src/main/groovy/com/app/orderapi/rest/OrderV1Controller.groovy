@@ -38,7 +38,7 @@ class OrderV1Controller {
     ResponseEntity<Map> findAllOrders(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(value = "text", required = false) String text
+        @RequestParam(value = "searchQuery", required = false) String text
     ) {
         def empty = text == null || text.isEmpty()
 
@@ -61,12 +61,16 @@ class OrderV1Controller {
     ResponseEntity<Map> findMyOrders(
         @AuthenticationPrincipal CustomUserDetails currentUser,
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(value = "searchQuery", required = false) String text
     ) {
+        def empty = text == null || text.isEmpty()
+
         def user = userService.validateAndGetUserByUsername(currentUser.username)
 
-        def pagingSort = PageRequest.of(page, size)
-        def pageResult = orderService.findOrdersByUser(user, pagingSort)
+        def paging = PageRequest.of(page, size)
+
+        def pageResult = empty ? orderService.findOrdersByUser(user, paging) : orderService.findOrdersByUser(user, text, paging)
 
         def response = [:]
 

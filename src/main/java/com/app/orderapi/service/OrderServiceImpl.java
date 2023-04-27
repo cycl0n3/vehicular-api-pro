@@ -55,6 +55,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Page<Order> findOrdersByUser(User user, String searchQuery, PageRequest paging) {
+        return orderRepository.findAllByUserAndDescriptionContainingIgnoreCaseOrderByCreatedAtDesc(user, searchQuery, paging);
+    }
+
+    @Override
     public Long getNumberOfOrdersByUser(User user) {
         return orderRepository.countByUser(user);
     }

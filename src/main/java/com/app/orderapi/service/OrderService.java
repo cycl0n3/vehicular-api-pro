@@ -24,6 +24,8 @@ public interface OrderService {
 
     Page<Order> findOrdersByUser(User user, PageRequest paging);
 
+    Page<Order> findOrdersByUser(User user, String searchQuery, PageRequest paging);
+
     Long getNumberOfOrdersByUser(User user);
 
     Long getNumberOfAcceptedOrdersByUser(User user);
