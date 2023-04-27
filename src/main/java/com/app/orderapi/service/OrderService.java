@@ -10,10 +10,12 @@ import java.util.List;
 
 public interface OrderService {
 
+    @Deprecated
     List<Order> getOrders();
 
     Long getNumberOfOrders();
 
+    @Deprecated
     List<Order> getOrdersContainingText(String text);
 
     Order validateAndGetOrder(String id);
@@ -36,5 +38,5 @@ public interface OrderService {
 
     Page<Order> findAll(Pageable pageable);
 
-    Page<Order> findAllByDescription(String text, PageRequest paging);
+    Page<Order> findAllByText(String text, PageRequest paging);
 }

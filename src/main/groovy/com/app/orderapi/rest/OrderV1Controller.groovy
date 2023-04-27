@@ -44,7 +44,7 @@ class OrderV1Controller {
 
         def paging = PageRequest.of(page, size)
 
-        def pageResult = empty ? orderService.findAll(paging) : orderService.findAllByDescription(text, paging)
+        def pageResult = empty ? orderService.findAll(paging) : orderService.findAllByText(text, paging)
 
         def response = [:]
 

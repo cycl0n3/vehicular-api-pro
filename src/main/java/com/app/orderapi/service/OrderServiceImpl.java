@@ -56,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Page<Order> findOrdersByUser(User user, String searchQuery, PageRequest paging) {
-        return orderRepository.findAllByUserAndDescriptionContainingIgnoreCaseOrderByCreatedAtDesc(user, searchQuery, paging);
+        return orderRepository.findAllByUserAndIdContainingOrDescriptionContainingIgnoreCaseOrderByCreatedAtDesc(user, searchQuery, paging);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<Order> findAllByDescription(String text, PageRequest paging) {
+    public Page<Order> findAllByText(String text, PageRequest paging) {
         return orderRepository.findAllByDescriptionContainingIgnoreCase(text, paging);
     }
 }
