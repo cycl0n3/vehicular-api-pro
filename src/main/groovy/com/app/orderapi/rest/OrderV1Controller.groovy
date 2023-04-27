@@ -40,9 +40,9 @@ class OrderV1Controller {
         @RequestParam(defaultValue = "10") int size,
         @RequestParam(value = "text", required = false) String text
     ) {
-        def paging = PageRequest.of(page, size)
-
         def empty = text == null || text.isEmpty()
+
+        def paging = PageRequest.of(page, size)
 
         def pageResult = empty ? orderService.findAll(paging) : orderService.findAllByDescription(text, paging)
 

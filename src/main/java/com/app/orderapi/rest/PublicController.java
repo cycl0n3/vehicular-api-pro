@@ -18,7 +18,7 @@ public class PublicController {
 
     @GetMapping("/numberOfUsers")
     public ResponseEntity<Integer> getNumberOfUsers() {
-        return ResponseEntity.ok(userService.getUsers().size());
+        return ResponseEntity.ok(userService.findAllUsers().size());
     }
 
     @GetMapping("/numberOfOrders")

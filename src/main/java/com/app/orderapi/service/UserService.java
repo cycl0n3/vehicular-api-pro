@@ -2,6 +2,7 @@ package com.app.orderapi.service;
 
 import com.app.orderapi.model.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<User> getUsers();
+    List<User> findAllUsers();
 
     long getNumberOfUsers();
 
@@ -27,5 +28,7 @@ public interface UserService {
 
     void deleteUser(User user);
 
-    Page<User> getUsers(Pageable pagingSort);
+    Page<User> findAllUsers(PageRequest paging);
+
+    Page<User> findAllUsers(PageRequest paging, String search);
 }

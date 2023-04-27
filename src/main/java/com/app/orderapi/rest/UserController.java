@@ -45,7 +45,7 @@ public class UserController {
         @RequestParam(defaultValue = "10") int size
     ) {
         Pageable pagingSort = PageRequest.of(page, size);
-        Page<User> pageResult = userService.getUsers(pagingSort);
+        Page<User> pageResult = userService.findAllUsers(pagingSort);
 
         Map<String, Object> response = new HashMap<>();
 

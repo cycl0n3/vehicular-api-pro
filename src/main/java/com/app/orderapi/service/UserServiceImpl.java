@@ -5,6 +5,7 @@ import com.app.orderapi.exception.UserNotFoundException;
 import com.app.orderapi.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<User> getUsers() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
@@ -28,8 +29,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getUsers(Pageable pagingSort) {
-        return userRepository.findAll(pagingSort);
+    public Page<User> findAllUsers(PageRequest paging) {
+        return userRepository.findAll(paging);
+    }
+
+    @Override
+    public Page<User> findAllUsers(PageRequest paging, String search) {
+        return userRepository.findAllByUsernameContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, paging);
     }
 
     @Override

@@ -5,7 +5,6 @@ import com.app.orderapi.mapper.UserMapper
 import com.app.orderapi.rest.dto.UserDto
 
 import com.app.orderapi.security.CustomUserDetails
-import com.app.orderapi.service.OrderService
 import com.app.orderapi.service.UserService
 
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,18 +38,22 @@ class UserV1Controller {
     UserMapper userMapper
 
     @GetMapping("/me")
-    ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser) {
+    ResponseEntity<UserDto> findMe(@AuthenticationPrincipal CustomUserDetails currentUser) {
         def userDto = userMapper.toUserDto(userService.validateAndGetUserByUsername(currentUser.username))
         return ResponseEntity.ok(userDto)
     }
 
     @GetMapping
-    ResponseEntity<Map> getUsers(
+    ResponseEntity<Map> findAllUsers(
         @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(value = "text", required = false) String text
     ) {
-        def pagingSort = PageRequest.of(page, size)
-        def pageResult = userService.getUsers(pagingSort)
+        def empty = text == null || text.isEmpty()
+
+        def paging = PageRequest.of(page, size)
+
+        def pageResult = empty ? userService.findAllUsers(paging) : userService.findAllUsers(paging, text)
 
         def response = [:]
 
@@ -64,7 +67,7 @@ class UserV1Controller {
     }
 
     @GetMapping("/{username}")
-    ResponseEntity<UserDto> getUser(@PathVariable String username) {
+    ResponseEntity<UserDto> findUser(@PathVariable String username) {
         def userDto = userMapper.toUserDto(userService.validateAndGetUserByUsername(username))
 
         return ResponseEntity.ok(userDto)
@@ -90,6 +93,7 @@ class UserV1Controller {
 
             return ResponseEntity.ok().build()
         } catch (Exception e) {
+            e.printStackTrace()
             return ResponseEntity.badRequest().build()
         }
     }
